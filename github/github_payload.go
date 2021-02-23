@@ -1,4 +1,5 @@
-package github_payload
+package github
+
 
 import "time"
 

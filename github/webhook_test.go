@@ -1,22 +1,23 @@
-package webhook
+package github
 
 import (
-	"bytes"
-	"log"
-	"net/http"
-	"net/http/httptest"
-	"errors"
-	"os"
-	"testing"
-	"io"
-	"reflect"
+		"bytes"
+		"log"
+		"net/http"
+		"net/http/httptest"
+		"os"
+		"testing"
+		"io"
+		"reflect"
 
-	"github.com/TRQ1/webhook-cevier-go/webhook"
-	"github.com/TRQ1/webhook-reciver-go/github_payload"
-	"github.com/stretchr/testify/require"
+		"github.com/TRQ1/webhook-cevier-go/webhook"
+		"github.com/TRQ1/webhook-reciver-go/github_payload"
+		"github.com/stretchr/testify/require"
 )
 
-
+// NOTES:
+// - Run "go test" to run tests
+// Reference from https://github.com/go-playground/webhooks
 const (
 	path = "/webhooks"
 )
@@ -36,6 +37,7 @@ func TestMain(m *testing.M) {
 }
 
 func newServer(handler http.HandlerFunc) *httptest.Server {
+	// new server start
 	mux := http.NewServeMux()
 	mux.HandleFunc(path, handler)
 	return httptest.NewServer(mux)
@@ -44,6 +46,7 @@ func newServer(handler http.HandlerFunc) *httptest.Server {
 func TestBadRequests(t *testing.T) {
 
 	assert := require.New(t)
+	// test structer
 	tests := []struct {
 		name    string
 		event   Event
@@ -168,7 +171,7 @@ func TestWebhook(t *testing.T) {
 			name:     "PullRequestReviewCommentEvent",
 			event:    PullRequestReviewCommentEvent,
 			typ:      PullRequestReviewCommentPayload{},
-			filename: "../testdata/ull-request-review-comment.json",
+			filename: "../testdata/pull-request-review-comment.json",
 			headers: http.Header{
 				"X-Github-Event":  []string{"pull_request_review_comment"},
 				"X-Hub-Signature": []string{"sha1=a9ece15dbcbb85fa5f00a0bf409494af2cbc5b60"},
